@@ -16,7 +16,17 @@ namespace RPCClient
     public class RbMqMessageBroker
     {
 
-        private readonly List<string> corellationIdList = new List<string>();
+        private readonly List<string> correlationIdList = new List<string>();
+
+
+       public void DeclareQueue(string QueueName)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var connection = factory.CreateConnection();
+            var channel = connection.CreateModel();
+        }
+
+
         public void Publish<T>(T message, string queue, string replyQueue) where T : Message
         {
             var factory = new ConnectionFactory() { HostName = "localhost"};
@@ -46,7 +56,7 @@ namespace RPCClient
                         body
                         );
 
-                    corellationIdList.Add(correlationId);
+                    correlationIdList.Add(correlationId);
                 }
             }
         }
