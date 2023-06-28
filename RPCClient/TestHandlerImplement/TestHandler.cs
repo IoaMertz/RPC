@@ -13,7 +13,7 @@ namespace MessageBroker.TestHandlerImplement
     {
         public Task Handle(TestMessageImple message)
         {
-            message.message += "skataaaaa";
+            message.message += "inside TestHandler handle method";
             return Task.CompletedTask;
         }
     }

@@ -22,10 +22,6 @@ namespace RPCMessageBrokerClient
         //private readonly List<string> correlationIdList = new List<string>();
         private readonly ConcurrentDictionary<string,
                 TaskCompletionSource<string>> callbackMapper = new();
-
-
-
-
         public string DeclareQueue(string QueueName)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
@@ -34,8 +30,10 @@ namespace RPCMessageBrokerClient
             return channel.QueueDeclare(QueueName);
         }
 
-
-        public Task<string> Publish<T>(T message, string queue, string replyQueue) where T : Message
+        public Task<string> Publish<T>(T message,
+            string queue,
+            string replyQueue,
+            string? correlationId = null) where T : Message
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
 
@@ -44,8 +42,10 @@ namespace RPCMessageBrokerClient
                 using (var channel = connection.CreateModel())
                 {
                     IBasicProperties props = channel.CreateBasicProperties();
-
-                    var correlationId = Guid.NewGuid().ToString();
+                    if(correlationId == null)
+                    {
+                        correlationId = Guid.NewGuid().ToString();
+                    }
 
                     props.CorrelationId = correlationId;
 
@@ -73,9 +73,9 @@ namespace RPCMessageBrokerClient
             }
         }
 
-        public void Subscribe<TH>(string subscribingQueue,bool correlationIdCheck = false)
+        public void Subscribe<TH>(string subscribingQueue,
+            bool correlationIdCheck = false)
         {
-
             var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
 
             using (var connection = factory.CreateConnection())
@@ -85,11 +85,16 @@ namespace RPCMessageBrokerClient
                     var consumer = new AsyncEventingBasicConsumer(channel);
 
                     var HandlerType = typeof(TH);
-                    var handlerMethod = HandlerType.GetMethod("Handle");
 
+                    var handlerMethod = HandlerType.GetMethod("Handle");
 
                     consumer.Received += async (model, ea) =>
                     {
+                        // if we want to check for correlation and we cant find the Id then exit the method
+                        if (correlationIdCheck && !callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out var tcs))
+                        {
+                            return;
+                        }
 
                         var message = Encoding.UTF8.GetString(ea.Body.ToArray());
 
@@ -105,9 +110,24 @@ namespace RPCMessageBrokerClient
                 }
             }
         }
+
+
+        public void Reply(Message messageBody , string correlationId)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using var connection = factory.CreateConnection();
+
+            using var channel = connection.CreateModel();
+
+            var responseBytes = 
+
+            channel.BasicPublish(
+                       exchange: string.Empty,
+                       routingKey: props.ReplyTo,
+                       basicProperties: replyProps,
+                       body: responseBytes
+                       );
+        }
     }
-
-
-
-
 }
