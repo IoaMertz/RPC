@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using MessageBroker.Interfaces;
+using MessageBroker.Messages;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,26 +12,32 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
-namespace RPCClient
+namespace RPCMessageBrokerClient
 {
-    public class RbMqMessageBroker
+    public class RbMqMessageBroker : IMessageBroker
     {
 
-        private readonly List<string> correlationIdList = new List<string>();
+        //private readonly List<string> correlationIdList = new List<string>();
+        private readonly ConcurrentDictionary<string,
+                TaskCompletionSource<string>> callbackMapper = new();
 
 
-       public void DeclareQueue(string QueueName)
+
+
+        public string DeclareQueue(string QueueName)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
+            return channel.QueueDeclare(QueueName);
         }
 
 
-        public void Publish<T>(T message, string queue, string replyQueue) where T : Message
+        public Task<string> Publish<T>(T message, string queue, string replyQueue) where T : Message
         {
-            var factory = new ConnectionFactory() { HostName = "localhost"};
+            var factory = new ConnectionFactory() { HostName = "localhost" };
 
             using (var connection = factory.CreateConnection())
             {
@@ -47,7 +55,7 @@ namespace RPCClient
 
                     var bodyContent = JsonConvert.SerializeObject(message);
 
-                    var body =Encoding.UTF8.GetBytes(bodyContent);
+                    var body = Encoding.UTF8.GetBytes(bodyContent);
 
                     channel.BasicPublish(
                         string.Empty,
@@ -56,15 +64,19 @@ namespace RPCClient
                         body
                         );
 
-                    correlationIdList.Add(correlationId);
+                    var tcs = new TaskCompletionSource<string>();
+
+                    callbackMapper.TryAdd(correlationId, tcs);
+
+                    return tcs.Task;
                 }
             }
         }
 
-        public void Subscribe<TH>(string queue)
+        public void Subscribe<TH>(string subscribingQueue,bool correlationIdCheck = false)
         {
 
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
 
             using (var connection = factory.CreateConnection())
             {
@@ -73,15 +85,21 @@ namespace RPCClient
                     var consumer = new AsyncEventingBasicConsumer(channel);
 
                     var HandlerType = typeof(TH);
+                    var handlerMethod = HandlerType.GetMethod("Handle");
+
 
                     consumer.Received += async (model, ea) =>
                     {
-                         (typeof(IEventHandler<>).MakeGenericType(HandlerType)).GetMethod("Handle");
+
+                        var message = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+                        await (Task)handlerMethod.Invoke(null, new object[] { message });
+
                     };
 
                     channel.BasicConsume(
                         consumer,
-                        queue,
+                        subscribingQueue,
                         autoAck: true
                         );
                 }
@@ -89,9 +107,7 @@ namespace RPCClient
         }
     }
 
-   
 
-    internal interface IEventHandler<T>
-    {
-    }
+
+
 }
