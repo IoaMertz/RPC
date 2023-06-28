@@ -30,10 +30,12 @@ namespace RPCMessageBrokerClient
             return channel.QueueDeclare(QueueName);
         }
 
-        public Task<string> Publish<T>(T message,
+        //if we publish a message we want to add a corellationId.
+        //if we publish a reply we want to take the arleady existing correlationId
+        public Task<string> Publish(Message message,
             string queue,
             string replyQueue,
-            string? correlationId = null) where T : Message
+            string? correlationId = null) 
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
 
@@ -42,9 +44,13 @@ namespace RPCMessageBrokerClient
                 using (var channel = connection.CreateModel())
                 {
                     IBasicProperties props = channel.CreateBasicProperties();
+
+                    var tcs = new TaskCompletionSource<string>();
+
                     if(correlationId == null)
                     {
                         correlationId = Guid.NewGuid().ToString();
+                        callbackMapper.TryAdd(correlationId, tcs);
                     }
 
                     props.CorrelationId = correlationId;
@@ -64,17 +70,16 @@ namespace RPCMessageBrokerClient
                         body
                         );
 
-                    var tcs = new TaskCompletionSource<string>();
-
-                    callbackMapper.TryAdd(correlationId, tcs);
-
                     return tcs.Task;
                 }
             }
         }
 
-        public void Subscribe<TH>(string subscribingQueue,
-            bool correlationIdCheck = false)
+        //if we subscribe to reply we want to check the correlationId.
+        //If we subscribe to a message we do not want to check
+        public void Subscribe<T,TH>(string subscribingQueue,
+            bool correlationIdCheck = false) where T : Message
+            where TH : IMessageHandler<T>
         {
             var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
 
@@ -112,22 +117,6 @@ namespace RPCMessageBrokerClient
         }
 
 
-        public void Reply(Message messageBody , string correlationId)
-        {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-
-            using var connection = factory.CreateConnection();
-
-            using var channel = connection.CreateModel();
-
-            var responseBytes = 
-
-            channel.BasicPublish(
-                       exchange: string.Empty,
-                       routingKey: props.ReplyTo,
-                       basicProperties: replyProps,
-                       body: responseBytes
-                       );
-        }
+        
     }
 }

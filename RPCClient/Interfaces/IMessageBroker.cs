@@ -1,11 +1,14 @@
 ﻿using MessageBroker.Messages;
+using System.Buffers;
 
 namespace MessageBroker.Interfaces
 {
     public interface IMessageBroker
     {
         string DeclareQueue(string QueueName);
-        Task<string> Publish<T>(T message, string queue, string replyQueue) where T : Message;
-        void Subscribe<TH>(string queue,bool correlationIdCheck = false);
+        Task<string> Publish(Message message, string queue, string replyQueue, string? correlationId = null);
+        void Subscribe<T,TH>(string queue,bool correlationIdCheck = false)
+            where T : Message 
+            where TH : IMessageHandler<T>;
     }
 }
