@@ -1,4 +1,5 @@
 ﻿using MessageBroker.Interfaces;
+using RPCMessageBrokerClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,19 @@ using TestServer.ServerMessages;
 
 namespace TestServer.ServerHandlers
 {
-    public class ClientRequestMessageHandler : IMessageHandler<ClientRequestMessage>
+    public class ClientRequestMessageHandler : IReplyMessageHandler<ClientRequestMessage>
     {
-        public Task Handle(ClientRequestMessage message)
+        
+
+        public Task Handle(ClientRequestMessage message, string? replyQueue, string? correlationId)
         {
-            throw new NotImplementedException();
+
+            var brooker = new RbMqMessageBroker();
+            message.Number = 10000;
+
+            brooker.Publish(message,replyQueue,correlationId);
+            
+            return Task.CompletedTask;
         }
     }
 }

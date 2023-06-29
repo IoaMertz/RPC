@@ -14,11 +14,20 @@ namespace TestClient
 
             var serverReplyQueue = broker.DeclareQueue("serverReplyQueue");
 
-            broker.Subscribe<ServerReplyMessage, ServerReplyMessageHandler>(serverReplyQueue,true);
+            broker.Subscribe<ServerReplyMessage, ServerReplyMessageHandler>(serverReplyQueue);
+
+
 
             var requestMessage = new ClientRequestMessage(2);
 
-            broker.Publish(requestMessage,"DoubleNumber",serverReplyQueue);
+            while (true)
+            {
+                Console.WriteLine("press to publish in DoubleNumber");
+                Console.ReadLine();
+                broker.Publish(requestMessage,"DoubleNumber",serverReplyQueue);
+            }
+
+
             
         }
     }

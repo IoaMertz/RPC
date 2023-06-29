@@ -7,16 +7,23 @@ namespace TestServer
 {
     internal class Program
     {
-        public static IMessageBroker broker;
+        
         static void Main(string[] args)
         {
-            broker = new RbMqMessageBroker();
+             IMessageBroker broker = new RbMqMessageBroker();
+            Console.WriteLine("hello");
 
             broker.DeclareQueue("DoubleNumber");
 
-            broker.Subscribe<ClientRequestMessage, ClientRequestMessageHandler>("DoubleNumber");
 
-            broker.Publish
+
+            //broker.SubscribeReply<ClientRequestMessage, ClientRequestMessageHandler>("DoubleNumber");
+            Console.WriteLine("asdasdasdsad");
+            broker.Subscribe<ClientRequestMessage, Test>("DoubleNumber");
+
+            Console.ReadKey();
+
+
         }
     }
 }

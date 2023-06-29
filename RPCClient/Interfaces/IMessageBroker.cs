@@ -7,8 +7,13 @@ namespace MessageBroker.Interfaces
     {
         string DeclareQueue(string QueueName);
         Task<string> Publish(Message message, string queue, string replyQueue, string? correlationId = null);
-        void Subscribe<T,TH>(string queue,bool correlationIdCheck = false)
+        void Subscribe<T,TH>(string subscribingQueue,
+              bool correlationIdCheck = false)
             where T : Message 
             where TH : IMessageHandler<T>;
+
+        void SubscribeReply<T, TH>(string subscribingQueue,
+             bool correlationIdCheck = false) where T : Message
+          where TH : IReplyMessageHandler<T>;
     }
 }

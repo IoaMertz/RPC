@@ -10,6 +10,8 @@ namespace MessageBroker.Messages
     {
         public string MessageType { get; protected set; }
         public DateTime TimeStamp { get; protected set; }
+        public string corelationId { get; set; }
+        public string replyQueue { get; set; }
         public Message()
 
         {

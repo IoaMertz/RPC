@@ -1,5 +1,4 @@
 ﻿using MessageBroker.Interfaces;
-using MessageBroker.testMessageImplementation;
 using RPCMessageBrokerClient;
 using System.Reflection;
 
