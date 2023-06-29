@@ -28,6 +28,7 @@ namespace RPCMessageBrokerClient
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
             return channel.QueueDeclare(QueueName);
+            
         }
 
         //if we publish a message we want to add a corellationId.

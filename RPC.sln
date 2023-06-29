@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBroker", "RPCClient\MessageBroker.csproj", "{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestErver\TestServer.csproj", "{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
