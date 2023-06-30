@@ -1,24 +1,21 @@
-﻿using MediatR;
+﻿using MessageBrokerDomain.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Schema;
 
-namespace Application.Commands
+namespace Application.Messages
 {
-    public class CalculationRequestCommand : IRequest<bool>
+    public class CalculationRequestMessage : Message
     {
         public int Number { get; set; }
         public string ServiceName { get; set; }
 
-        public CalculationRequestCommand(int number, string serviceName )
+        public CalculationRequestMessage(int number ,string serviceName)
         {
             Number = number;
             ServiceName = serviceName;
         }
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using Domain.Models;
+﻿using Application.Commands;
+using Domain.Models;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +10,19 @@ namespace CalculationsApi.Controllers
     [ApiController]
     public class CalculateController : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<CalculateResponseObject>> Calculate(
-            [FromBody] CalculateRequestObject calculateRequestObject)
+        private readonly IMediator _mediator;
+
+        public CalculateController(IMediator mediator)
         {
+            _mediator = mediator;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<CalculationResponseObject>> Calculate(
+            [FromBody] CalculationRequestObject calculateRequestObject)
+        {
+            await _mediator.Send(new CalculationRequestCommand(calculateRequestObject.Number,calculateRequestObject.Service));
+
             return Ok();
         }
     }

@@ -14,12 +14,15 @@ namespace Application.Services
             _serviceProvider = serviceProvider;
         }
 
-        public ICalculationService GetService(string ServiceName)
-        {
-            Type ServiceType = Type.GetType(ServiceName);
-            var serviceInstance =  _serviceProvider.GetService(ServiceType);
+        //public ICalculationService GetService(string ServiceName)
+        //{
+        //    Type ServiceType = Type.GetType(ServiceName);
+        //    var serviceInstance =  _serviceProvider.GetService(ServiceType);
+
             
-        }
+
+            
+        //}
 
          
     }
