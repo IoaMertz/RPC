@@ -105,7 +105,7 @@ namespace MessageBrokerInfrastructure
 
             var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
 
-            var concreteType = typeof(IMessageHandler<>).MakeGenericType(typeof(T));
+            var handlerConcreteType = typeof(IMessageHandler<>).MakeGenericType(typeof(T));
 
             
             consumer.Received += async (model, ea) =>
@@ -121,7 +121,7 @@ namespace MessageBrokerInfrastructure
 
                 var messageObject = JsonConvert.DeserializeObject<T>(messageString);
 
-                await (Task)concreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] { messageObject });
+                await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] { messageObject });
 
             };
 
@@ -145,11 +145,12 @@ namespace MessageBrokerInfrastructure
 
             var consumer = new AsyncEventingBasicConsumer(channel);
 
-            var HandlerType = typeof(TH);
+            var handlerType = typeof(TH);
 
-            var HandlerInstance = Activator.CreateInstance(HandlerType);
+            //var HandlerInstance = Activator.CreateInstance(HandlerType);
+            var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
 
-            var concreteType = typeof(IReplyMessageHandler<>).MakeGenericType(typeof(T));
+            var handlerConcreteType = typeof(IReplyMessageHandler<>).MakeGenericType(typeof(T));
 
 
             consumer.Received += async (model, ea) =>
@@ -167,7 +168,7 @@ namespace MessageBrokerInfrastructure
 
                 var replyQueue = ea.BasicProperties.ReplyTo;
 
-                await (Task)concreteType.GetMethod("Handle").Invoke(HandlerInstance, new object[] {
+                await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] {
                     messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
             };
 
