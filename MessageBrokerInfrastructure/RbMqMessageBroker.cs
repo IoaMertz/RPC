@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using static System.Formats.Asn1.AsnWriter;
 using Microsoft.Extensions.DependencyInjection;
+using MessageBrokerDomain.Commands;
+using MediatR;
 
 namespace MessageBrokerInfrastructure
 {
@@ -27,10 +29,12 @@ namespace MessageBrokerInfrastructure
                 TaskCompletionSource<string>> callbackMapper = new();
 
         private readonly IServiceProvider _serviceProvider;
+        private readonly IMediator _mediator;
 
-        public RbMqMessageBroker(IServiceProvider serviceProvider)
+        public RbMqMessageBroker(IServiceProvider serviceProvider, IMediator mediator)
         {
             _serviceProvider = serviceProvider;
+            _mediator = mediator;
         }
         public string DeclareQueue(string QueueName)
         {
@@ -39,6 +43,12 @@ namespace MessageBrokerInfrastructure
             var channel = connection.CreateModel();
             return channel.QueueDeclare(QueueName, false, false, false, null);
 
+        }
+
+        public Task SendCommand<T>(T command) where T : Command
+        {
+            // command : message , message:IRequest<bool>, _mediator.Send() expects a IRequest<bool>
+            return _mediator.Send(command);
         }
 
         //if we publish a message we want to add a corellationId.
