@@ -15,7 +15,7 @@ namespace TestServer.ServerHandlers
 
         public Task Handle(ClientRequestMessage message, string? replyQueue, string? correlationId)
         {
-
+            Console.WriteLine($"{replyQueue} , {correlationId} ");
             var brooker = new RbMqMessageBroker();
             message.Number = 10000;
 

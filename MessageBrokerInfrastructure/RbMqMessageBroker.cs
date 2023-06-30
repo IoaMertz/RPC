@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using MessageBroker.Interfaces;
-using MessageBroker.Messages;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,8 +9,15 @@ using System.Text.Json.Serialization;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using MessageBrokerDomain.Interfaces;
+using RabbitMQ.Client;
+using MessageBrokerDomain.Messages;
+using Newtonsoft.Json;
+using RabbitMQ.Client.Events;
+using static System.Formats.Asn1.AsnWriter;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace RPCMessageBrokerClient
+namespace MessageBrokerInfrastructure
 {
     public class RbMqMessageBroker : IMessageBroker
     {
@@ -96,11 +99,13 @@ namespace RPCMessageBrokerClient
 
             var consumer = new AsyncEventingBasicConsumer(channel);
 
-            var HandlerType = typeof(TH);
+            var handlerType = typeof(TH);
 
-            var HandlerInstance = Activator.CreateInstance(HandlerType);
+            //var HandlerInstance = Activator.CreateInstance(HandlerType);
+
+            var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
+
             var concreteType = typeof(IMessageHandler<>).MakeGenericType(typeof(T));
-
 
             
             consumer.Received += async (model, ea) =>
@@ -115,9 +120,8 @@ namespace RPCMessageBrokerClient
                 var messageString = Encoding.UTF8.GetString(ea.Body.ToArray());
 
                 var messageObject = JsonConvert.DeserializeObject<T>(messageString);
-                Console.WriteLine("sdfsdfsdf");
 
-                await (Task)concreteType.GetMethod("Handle").Invoke(HandlerInstance, new object[] { messageObject });
+                await (Task)concreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] { messageObject });
 
             };
 
@@ -161,7 +165,10 @@ namespace RPCMessageBrokerClient
 
                 var messageObject = JsonConvert.DeserializeObject<T>(messageString);
 
-                await (Task)concreteType.GetMethod("Handle").Invoke(HandlerInstance, new object[] { messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
+                var replyQueue = ea.BasicProperties.ReplyTo;
+
+                await (Task)concreteType.GetMethod("Handle").Invoke(HandlerInstance, new object[] {
+                    messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
             };
 
             

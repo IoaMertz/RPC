@@ -17,9 +17,9 @@ namespace TestServer
 
 
 
-            //broker.SubscribeReply<ClientRequestMessage, ClientRequestMessageHandler>("DoubleNumber");
+            broker.SubscribeReply<ClientRequestMessage, ClientRequestMessageHandler>("DoubleNumber");
             Console.WriteLine("asdasdasdsad");
-            broker.Subscribe<ClientRequestMessage, Test>("DoubleNumber");
+            //broker.Subscribe<ClientRequestMessage, Test>("DoubleNumber");
 
             Console.ReadKey();
 

@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBroker", "RPCClient\MessageBroker.csproj", "{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageBrokerLb", "MessageBrokerLb", "{38BA5846-BAD9-4371-82EC-EC63369C9C2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClient", "TestClient\TestClient.csproj", "{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{BBE1BCB3-9BD7-4067-AA72-932F89F6D2D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestErver\TestServer.csproj", "{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5E25498B-47CA-4AF8-AFB0-159309F6265C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBrokerDomain", "MessageBrokerDomain\MessageBrokerDomain.csproj", "{717369F6-B141-43BB-8DE3-FCEFE65FCB2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBrokerInfrastructure", "MessageBrokerInfrastructure\MessageBrokerInfrastructure.csproj", "{A4FFC8BC-D755-452D-ACD3-7EBC56D2FA66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,21 +19,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24313FB5-2AF0-4EAF-9AAF-068F1FC64694}.Release|Any CPU.Build.0 = Release|Any CPU
-		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{055C67E3-CB41-4ABB-8EDA-9495AE6CD138}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B2044BF-F5E4-47CB-AF78-4DB62F2786A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{717369F6-B141-43BB-8DE3-FCEFE65FCB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{717369F6-B141-43BB-8DE3-FCEFE65FCB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{717369F6-B141-43BB-8DE3-FCEFE65FCB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{717369F6-B141-43BB-8DE3-FCEFE65FCB2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4FFC8BC-D755-452D-ACD3-7EBC56D2FA66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4FFC8BC-D755-452D-ACD3-7EBC56D2FA66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4FFC8BC-D755-452D-ACD3-7EBC56D2FA66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4FFC8BC-D755-452D-ACD3-7EBC56D2FA66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BBE1BCB3-9BD7-4067-AA72-932F89F6D2D2} = {38BA5846-BAD9-4371-82EC-EC63369C9C2D}
+		{5E25498B-47CA-4AF8-AFB0-159309F6265C} = {38BA5846-BAD9-4371-82EC-EC63369C9C2D}
+		{717369F6-B141-43BB-8DE3-FCEFE65FCB2B} = {BBE1BCB3-9BD7-4067-AA72-932F89F6D2D2}
+		{A4FFC8BC-D755-452D-ACD3-7EBC56D2FA66} = {5E25498B-47CA-4AF8-AFB0-159309F6265C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79DAB178-5E44-46EE-8BCB-C1A029566729}
