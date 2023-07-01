@@ -1,4 +1,5 @@
 using Application;
+using MessageBrokerDomain.Interfaces;
 using MessageBrokerInfrastructure;
 
 
@@ -44,7 +45,10 @@ namespace CalculationsApi
 
         private static void ConfigureEventBus(WebApplication app)
         {
-            var eventBus = app.Services.GetRequiredService<IEventBus>();
+            var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
+            messageBroker.SubscribeRPC<>
+
+
             
         }
     }
