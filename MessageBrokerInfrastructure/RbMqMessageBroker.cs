@@ -97,7 +97,7 @@ namespace MessageBrokerInfrastructure
         }
 
         //overload when we need to reply
-        public Task Subscribe<T, TH>(string subscribingQueue,
+        public void Subscribe<T, TH>(string subscribingQueue,
                bool correlationIdCheck = false) where T : Message
             where TH : IMessageHandler<T>
         {
@@ -140,7 +140,7 @@ namespace MessageBrokerInfrastructure
                 subscribingQueue,
                 autoAck: true
                 );
-            return Task.CompletedTask;
+            
         }
 
 
@@ -183,7 +183,7 @@ namespace MessageBrokerInfrastructure
                     messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
 
 
-                tcs.SetResult("Ok");
+                tcs.SetResult($"Ok {messageString}");
 
             };
 

@@ -12,8 +12,7 @@ namespace MessageBrokerDomain.Interfaces
             where T : Message 
             where TH : IMessageHandler<T>;
 
-        void SubscribeReply<T, TH>(string subscribingQueue,
-             bool correlationIdCheck = false) where T : Message
+        void SubscribeReply<T, TH>(string subscribingQueue) where T : Message
           where TH : IReplyMessageHandler<T>;
     }
 }
