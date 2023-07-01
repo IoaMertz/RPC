@@ -1,3 +1,7 @@
+using Application;
+using MessageBrokerInfrastructure;
+
+
 namespace CalculationsApi
 {
     public class Program
@@ -12,6 +16,12 @@ namespace CalculationsApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.ClientApplicationRegisterServices();
+
+            builder.Services.MessageBrokerInfrastructureRegisterServices();
+
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
             var app = builder.Build();
 

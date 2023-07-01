@@ -97,7 +97,7 @@ namespace MessageBrokerInfrastructure
         }
 
         //overload when we need to reply
-        public void Subscribe<T, TH>(string subscribingQueue,
+        public Task Subscribe<T, TH>(string subscribingQueue,
                bool correlationIdCheck = false) where T : Message
             where TH : IMessageHandler<T>
         {
@@ -140,11 +140,12 @@ namespace MessageBrokerInfrastructure
                 subscribingQueue,
                 autoAck: true
                 );
+            return Task.CompletedTask;
         }
 
 
-        public void SubscribeReply<T, TH>(string subscribingQueue,
-              bool correlationIdCheck = false) where T : Message
+        public void SubscribeReply<T, TH>(string subscribingQueue
+             ) where T : Message
            where TH : IReplyMessageHandler<T>
         {
             var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
@@ -167,7 +168,7 @@ namespace MessageBrokerInfrastructure
             {
                 
                 // if we want to check for correlation and we cant find the Id then exit the method
-                if (correlationIdCheck && !callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out var tcs))
+                if ( !callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out var tcs))
                 {
                     return;
                 }
@@ -180,6 +181,10 @@ namespace MessageBrokerInfrastructure
 
                 await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] {
                     messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
+
+
+                tcs.SetResult("Ok");
+
             };
 
             

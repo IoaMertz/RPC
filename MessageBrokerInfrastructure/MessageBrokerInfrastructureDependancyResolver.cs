@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace MessageBrokerInfrastructure
 {
-    public static class DependancyResolver
+    public static class MessageBrokerInfrastructureDependancyResolver
     {
-        public static IServiceCollection RegisterServices(this IServiceCollection services)
+        public static IServiceCollection MessageBrokerInfrastructureRegisterServices(this IServiceCollection services)
         {
             services.AddSingleton<IMessageBroker, RbMqMessageBroker>();
 

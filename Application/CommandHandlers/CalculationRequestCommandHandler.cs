@@ -17,11 +17,11 @@ namespace Application.CommandHandlers
         {
             _messageBroker = messageBroker;
         }
-        public Task<bool> Handle(CalculationRequestCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CalculationRequestCommand request, CancellationToken cancellationToken)
         {
-            _messageBroker.Publish(new CalculationRequestMessage(request.Number,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
+             await _messageBroker.Publish(new CalculationRequestMessage(request.Number,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
 
-            return Task.FromResult(true);
+            return true;
         }
     }
 }

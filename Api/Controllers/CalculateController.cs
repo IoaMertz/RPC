@@ -17,11 +17,13 @@ namespace CalculationsApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<CalculationResponseObject>> Calculate(
             [FromBody] CalculationRequestObject calculateRequestObject)
         {
             await _mediator.Send(new CalculationRequestCommand(calculateRequestObject.Number,calculateRequestObject.Service));
+            // there we sould wait for the result and send the response
+
 
             return Ok();
         }
