@@ -35,7 +35,7 @@ namespace CalculationsApi.Controllers
                 return Ok("kati");
             }
 
-            return Ok("skata");
+            return StatusCode(500);
         }
     }
 }
