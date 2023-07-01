@@ -24,7 +24,7 @@ namespace CalculationsApi.Controllers
             var sendTask =  _mediator.Send(new CalculationRequestCommand(
                 calculateRequestObject.Number,calculateRequestObject.Service));
 
-            var completedTask = await Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromMinutes(0.1)));
+            var completedTask = await Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromMinutes(0.3)));
 
             if (completedTask == sendTask)
             {
