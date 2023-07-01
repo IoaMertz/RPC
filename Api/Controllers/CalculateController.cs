@@ -29,13 +29,10 @@ namespace CalculationsApi.Controllers
             if (completedTask == sendTask)
             {
                 // The sendTask completed within the timeout duration
-                var result = await sendTask;
-
-                // Process the result and send the appropriate response
-                return Ok("kati");
+                return Ok("Succes");
             }
 
-            return StatusCode(500);
+            return StatusCode(500, new { message="timeout"});
         }
     }
 }

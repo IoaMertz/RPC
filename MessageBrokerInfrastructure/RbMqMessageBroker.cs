@@ -45,15 +45,16 @@ namespace MessageBrokerInfrastructure
 
         }
 
-        public Task SendCommand<T>(T command) where T : Command
-        {
-            // command : message , message:IRequest<bool>, _mediator.Send() expects a IRequest<bool>
-            return _mediator.Send(command);
-        }
+        //public Task SendCommand<T>(T command) where T : Command
+        //{
+        //    // command : message , message:IRequest<bool>, _mediator.Send() expects a IRequest<bool>
+        //    return _mediator.Send(command);
+        //}
 
         //if we publish a message we want to add a corellationId.
         //if we publish a reply we want to take the arleady existing correlationId
-        public Task<string> Publish(Message message,
+
+        public Task<string> PublishRPC(Message message,
             string queue,
             string? replyQueue = null,
             string? correlationId = null)
@@ -96,10 +97,55 @@ namespace MessageBrokerInfrastructure
             }
         }
 
+
+        public void Publish(Message message,
+           string queue, string? correlationId = null)
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+
+            using (var connection = factory.CreateConnection())
+            {
+                using (var channel = connection.CreateModel())
+                {
+                    IBasicProperties props = channel.CreateBasicProperties();
+
+                    var tcs = new TaskCompletionSource<string>();
+
+                    if (correlationId == null)
+                    {
+                        correlationId = Guid.NewGuid().ToString();
+                        callbackMapper.TryAdd(correlationId, tcs);
+                    }
+
+                    props.CorrelationId = correlationId;
+
+                    var queueName = queue;
+
+                    var bodyContent = JsonConvert.SerializeObject(message);
+
+                    var body = Encoding.UTF8.GetBytes(bodyContent);
+
+                    channel.BasicPublish(
+                        string.Empty,
+                        queueName,
+                        props,
+                        body
+                        );
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
         //overload when we need to reply
-        public void Subscribe<T, TH>(string subscribingQueue,
-               bool correlationIdCheck = false) where T : Message
-            where TH : IMessageHandler<T>
+        public void SubscribeReply<T, TH>(string subscribingQueue) where T : Message
+            where TH : IReplyMessageHandler<T>
         {
             var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
 
@@ -115,24 +161,17 @@ namespace MessageBrokerInfrastructure
 
             var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
 
-            var handlerConcreteType = typeof(IMessageHandler<>).MakeGenericType(typeof(T));
+            var handlerConcreteType = typeof(IReplyMessageHandler<>).MakeGenericType(typeof(T));
 
-            
             consumer.Received += async (model, ea) =>
             {
                 
-                // if we want to check for correlation and we cant find the Id then exit the method
-                if (correlationIdCheck && !callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out var tcs))
-                {
-                    return;
-                }
-
                 var messageString = Encoding.UTF8.GetString(ea.Body.ToArray());
 
                 var messageObject = JsonConvert.DeserializeObject<T>(messageString);
 
-                await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] { messageObject });
-
+                await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] {
+                    messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
             };
 
             channel.BasicConsume(
@@ -140,13 +179,12 @@ namespace MessageBrokerInfrastructure
                 subscribingQueue,
                 autoAck: true
                 );
-            
         }
 
 
-        public void SubscribeReply<T, TH>(string subscribingQueue
+        public void SubscribeRPC<T, TH>(string subscribingQueue
              ) where T : Message
-           where TH : IReplyMessageHandler<T>
+           where TH : IMessageHandler<T>
         {
             var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
 
@@ -161,7 +199,7 @@ namespace MessageBrokerInfrastructure
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
             var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
 
-            var handlerConcreteType = typeof(IReplyMessageHandler<>).MakeGenericType(typeof(T));
+            var handlerConcreteType = typeof(IMessageHandler<>).MakeGenericType(typeof(T));
 
 
             consumer.Received += async (model, ea) =>
@@ -177,11 +215,7 @@ namespace MessageBrokerInfrastructure
 
                 var messageObject = JsonConvert.DeserializeObject<T>(messageString);
 
-                var replyQueue = ea.BasicProperties.ReplyTo;
-
-                await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] {
-                    messageObject, ea.BasicProperties.ReplyTo,ea.BasicProperties.CorrelationId });
-
+                await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] { messageObject });
 
                 tcs.SetResult($"Ok {messageString}");
 

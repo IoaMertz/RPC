@@ -1,8 +1,4 @@
-using Application;
-using MessageBrokerInfrastructure;
-
-
-namespace CalculationsApi
+namespace ServerAPI
 {
     public class Program
     {
@@ -16,12 +12,6 @@ namespace CalculationsApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            builder.Services.ClientApplicationRegisterServices();
-
-            builder.Services.MessageBrokerInfrastructureRegisterServices();
-
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
             var app = builder.Build();
 
@@ -40,12 +30,6 @@ namespace CalculationsApi
             app.MapControllers();
 
             app.Run();
-        }
-
-        private static void ConfigureEventBus(WebApplication app)
-        {
-            var eventBus = app.Services.GetRequiredService<IEventBus>();
-            
         }
     }
 }
