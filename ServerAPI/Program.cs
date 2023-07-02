@@ -1,4 +1,5 @@
 using MessageBrokerDomain.Interfaces;
+using MessageBrokerDomain.Messages;
 using MessageBrokerInfrastructure;
 namespace ServerAPI
 {
@@ -37,13 +38,13 @@ namespace ServerAPI
         }
 
 
-        private static void ConfigureEventBus(WebApplication app)
-        {
-            var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
-            messageBroker.DeclareQueue("");
-            messageBroker.Publish();
+        //private static void ConfigureEventBus(WebApplication app)
+        //{
+        //    var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
+        //    messageBroker.DeclareQueue("");
+        //    messageBroker.Publish( , "CalculationRequestReplyQueue");
             
 
-        }
+        //}
     }
 }
