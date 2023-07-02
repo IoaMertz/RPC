@@ -154,9 +154,8 @@ namespace MessageBrokerInfrastructure
 
             var scope = _serviceScopeFactory.CreateScope();
 
-            IEnumerable<object> allServices = _serviceProvider.GetServices<object>();
 
-            var handlerInstance = scope.ServiceProvider.GetServices(handlerType).FirstOrDefault();
+            var handlerInstance = scope.ServiceProvider.GetRequiredService(typeof(IReplyMessageHandler<T>));
 
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
@@ -202,9 +201,8 @@ namespace MessageBrokerInfrastructure
 
             var scope = _serviceScopeFactory.CreateScope();
             //var handlerInstance = _serviceProvider.GetServices(handlerType).FirstOrDefault();
-           var allServices = _serviceProvider.GetServices<object>().Count();
 
-            var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
+            var handlerInstance = scope.ServiceProvider.GetRequiredService(typeof(IMessageHandler<T>));
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
             //var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
