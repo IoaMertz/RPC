@@ -1,6 +1,9 @@
 ﻿using Application.CommandHandlers;
 using Application.Commands;
+using Application.MessageHandlers;
+using Application.Messages;
 using MediatR;
+using MessageBrokerDomain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,7 +17,10 @@ namespace Application
     {
         public static IServiceCollection ClientApplicationRegisterServices(this IServiceCollection services)
         {
-            services.AddScoped<IRequestHandler<CalculationRequestCommand, bool>, CalculationRequestCommandHandler>();
+            services.AddTransient<IRequestHandler<CalculationRequestCommand, bool>, CalculationRequestCommandHandler>();
+
+            services.AddTransient<IMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
+
             return services;
         }
     }

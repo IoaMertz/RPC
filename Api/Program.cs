@@ -1,7 +1,8 @@
-using Application;
+using Application.Messages;
 using MessageBrokerDomain.Interfaces;
 using MessageBrokerInfrastructure;
-
+using Application;
+using Application.MessageHandlers;
 
 namespace CalculationsApi
 {
@@ -18,11 +19,15 @@ namespace CalculationsApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.ClientApplicationRegisterServices();
+            builder.Services.AddTransient<IMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
             builder.Services.MessageBrokerInfrastructureRegisterServices();
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.ClientApplicationRegisterServices();
+
+
+
 
             var app = builder.Build();
 
@@ -40,13 +45,15 @@ namespace CalculationsApi
 
             app.MapControllers();
 
+            ConfigureEventBus(app);
+
             app.Run();
         }
 
         private static void ConfigureEventBus(WebApplication app)
         {
             var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
-            messageBroker.SubscribeRPC<>
+            messageBroker.SubscribeRPC<CalculationRequestMessage, CalculationRequestMessageHandler>("CalculationRequestReplyQueue");
 
 
             

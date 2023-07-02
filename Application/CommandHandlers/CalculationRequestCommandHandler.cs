@@ -19,7 +19,7 @@ namespace Application.CommandHandlers
         }
         public async Task<bool> Handle(CalculationRequestCommand request, CancellationToken cancellationToken)
         {
-             await _messageBroker.Publish(new CalculationRequestMessage(request.Number,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
+             await _messageBroker.PublishRPC(new CalculationRequestMessage(request.Number,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
 
             return true;
         }

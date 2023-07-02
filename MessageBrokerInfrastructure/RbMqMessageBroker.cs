@@ -30,11 +30,12 @@ namespace MessageBrokerInfrastructure
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IMediator _mediator;
-
-        public RbMqMessageBroker(IServiceProvider serviceProvider, IMediator mediator)
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        public RbMqMessageBroker(IServiceProvider serviceProvider, IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
             _serviceProvider = serviceProvider;
             _mediator = mediator;
+            _serviceScopeFactory = serviceScopeFactory;
         }
         public string DeclareQueue(string QueueName)
         {
@@ -156,10 +157,16 @@ namespace MessageBrokerInfrastructure
             var consumer = new AsyncEventingBasicConsumer(channel);
 
             var handlerType = typeof(TH);
+            //
+
+            var scope = _serviceScopeFactory.CreateScope();
+
+            var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
+
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
 
-            var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
+            //var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
 
             var handlerConcreteType = typeof(IReplyMessageHandler<>).MakeGenericType(typeof(T));
 
@@ -195,9 +202,14 @@ namespace MessageBrokerInfrastructure
             var consumer = new AsyncEventingBasicConsumer(channel);
 
             var handlerType = typeof(TH);
+            //
+
+            var scope = _serviceScopeFactory.CreateScope();
+
+            var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
-            var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
+            //var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
 
             var handlerConcreteType = typeof(IMessageHandler<>).MakeGenericType(typeof(T));
 
