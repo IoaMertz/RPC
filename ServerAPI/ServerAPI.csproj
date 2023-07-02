@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,8 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MessageBrokerDomain\MessageBrokerDomain.csproj" />
     <ProjectReference Include="..\MessageBrokerInfrastructure\MessageBrokerInfrastructure.csproj" />
     <ProjectReference Include="..\ServerAplication\ServerAplication.csproj" />
+    <ProjectReference Include="..\ServerDomain\ServerDomain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,8 @@
 using MessageBrokerDomain.Interfaces;
-using MessageBrokerInfrastructure;
 using ServerAplication.MessageHandlers;
 using ServerDomain.Messages;
 using ServerAplication;
+using MessageBrokerInfrastructure;
 
 namespace ServerAPI
 {
