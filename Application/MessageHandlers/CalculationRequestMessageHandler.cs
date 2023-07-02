@@ -13,7 +13,7 @@ namespace Application.MessageHandlers
     {
         public Task Handle(CalculationRequestMessage message)
         {
-            Console.WriteLine("we Are in clients reply handler yey i did something");
+            Console.WriteLine("we Are in clients reply handler yey i did something" + "message.Number = " + message.Number);
             return Task.CompletedTask;
         }
     }

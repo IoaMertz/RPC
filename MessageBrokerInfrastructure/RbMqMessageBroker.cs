@@ -30,12 +30,10 @@ namespace MessageBrokerInfrastructure
                 TaskCompletionSource<string>> callbackMapper = new();
 
         private readonly IServiceProvider _serviceProvider;
-        private readonly IMediator _mediator;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        public RbMqMessageBroker(IServiceProvider serviceProvider, IMediator mediator, IServiceScopeFactory serviceScopeFactory)
+        public RbMqMessageBroker(IServiceProvider serviceProvider, IServiceScopeFactory serviceScopeFactory)
         {
             _serviceProvider = serviceProvider;
-            _mediator = mediator;
             _serviceScopeFactory = serviceScopeFactory;
         }
         public string DeclareQueue(string QueueName)

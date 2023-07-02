@@ -1,6 +1,9 @@
 using MessageBrokerDomain.Interfaces;
-using MessageBrokerDomain.Messages;
 using MessageBrokerInfrastructure;
+using ServerAplication.MessageHandlers;
+using ServerDomain.Messages;
+using ServerAplication;
+
 namespace ServerAPI
 {
     public class Program
@@ -18,6 +21,8 @@ namespace ServerAPI
 
             builder.Services.MessageBrokerInfrastructureRegisterServices();
 
+            builder.Services.ServerApplicationRegisterServices();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,17 +39,18 @@ namespace ServerAPI
 
             app.MapControllers();
 
+            ConfigureMessageBroker(app);
+
             app.Run();
         }
 
 
-        //private static void ConfigureEventBus(WebApplication app)
-        //{
-        //    var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
-        //    messageBroker.DeclareQueue("");
-        //    messageBroker.Publish( , "CalculationRequestReplyQueue");
-            
+        private static void ConfigureMessageBroker(WebApplication app)
+        {
+            var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
+            messageBroker.DeclareQueue("CalculationRequestQueue");
+            messageBroker.SubscribeReply<CalculationRequestMessage, CalculationRequestMessageHandler>("CalculationRequestQueue");
 
-        //}
+        }
     }
 }

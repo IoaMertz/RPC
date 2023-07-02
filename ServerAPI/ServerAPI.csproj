@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MessageBrokerInfrastructure\MessageBrokerInfrastructure.csproj" />
+    <ProjectReference Include="..\ServerAplication\ServerAplication.csproj" />
   </ItemGroup>
 
 </Project>
