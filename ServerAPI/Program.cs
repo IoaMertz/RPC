@@ -1,3 +1,5 @@
+using MessageBrokerDomain.Interfaces;
+using MessageBrokerInfrastructure;
 namespace ServerAPI
 {
     public class Program
@@ -12,6 +14,8 @@ namespace ServerAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.MessageBrokerInfrastructureRegisterServices();
 
             var app = builder.Build();
 
@@ -30,6 +34,16 @@ namespace ServerAPI
             app.MapControllers();
 
             app.Run();
+        }
+
+
+        private static void ConfigureEventBus(WebApplication app)
+        {
+            var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
+            messageBroker.DeclareQueue("");
+            messageBroker.Publish();
+            
+
         }
     }
 }
