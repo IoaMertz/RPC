@@ -19,7 +19,7 @@ namespace CalculationsApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddTransient<IMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
+            builder.Services.AddSingleton<IMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
             builder.Services.MessageBrokerInfrastructureRegisterServices();
@@ -53,6 +53,7 @@ namespace CalculationsApi
         private static void ConfigureEventBus(WebApplication app)
         {
             var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
+            messageBroker.DeclareQueue("CalculationRequestReplyQueue");
             messageBroker.SubscribeRPC<CalculationRequestMessage, CalculationRequestMessageHandler>("CalculationRequestReplyQueue");
 
 

@@ -18,6 +18,7 @@ using static System.Formats.Asn1.AsnWriter;
 using Microsoft.Extensions.DependencyInjection;
 using MessageBrokerDomain.Commands;
 using MediatR;
+using Application.Messages;
 
 namespace MessageBrokerInfrastructure
 {
@@ -160,7 +161,7 @@ namespace MessageBrokerInfrastructure
             //
 
             var scope = _serviceScopeFactory.CreateScope();
-
+            var kati = _serviceProvider.GetServices(handlerType);
             var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
 
 
@@ -205,8 +206,9 @@ namespace MessageBrokerInfrastructure
             //
 
             var scope = _serviceScopeFactory.CreateScope();
+            var handlerInstance = _serviceProvider.GetServices(typeof(IMessageHandler<CalculationRequestMessage>)).FirstOrDefault();
 
-            var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
+            //var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
             //var handlerInstance = _serviceProvider.GetRequiredService(handlerType);
