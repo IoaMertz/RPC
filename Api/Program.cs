@@ -19,7 +19,7 @@ namespace CalculationsApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddSingleton<IMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
+            
             builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
             builder.Services.MessageBrokerInfrastructureRegisterServices();
