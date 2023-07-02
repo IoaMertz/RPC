@@ -206,7 +206,7 @@ namespace MessageBrokerInfrastructure
             //
 
             var scope = _serviceScopeFactory.CreateScope();
-            var handlerInstance = _serviceProvider.GetServices(handlerType).FirstOrDefault();
+            var handlerInstance = _serviceProvider.GetServices(typeof(IMessageHandler<T>)).FirstOrDefault();
 
             //var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
 
