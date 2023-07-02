@@ -137,12 +137,6 @@ namespace MessageBrokerInfrastructure
         }
 
 
-
-
-
-
-
-
         //overload when we need to reply
         public void SubscribeReply<T, TH>(string subscribingQueue) where T : Message
             where TH : IReplyMessageHandler<T>
@@ -160,7 +154,9 @@ namespace MessageBrokerInfrastructure
 
             var scope = _serviceScopeFactory.CreateScope();
 
-            var handlerInstance = _serviceProvider.GetServices(handlerType).FirstOrDefault();
+            IEnumerable<object> allServices = _serviceProvider.GetServices<object>();
+
+            var handlerInstance = scope.ServiceProvider.GetServices(handlerType).FirstOrDefault();
 
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
@@ -171,7 +167,8 @@ namespace MessageBrokerInfrastructure
 
             consumer.Received += async (model, ea) =>
             {
-                
+                Console.WriteLine("i am hereee");
+
                 var messageString = Encoding.UTF8.GetString(ea.Body.ToArray());
 
                 var messageObject = JsonConvert.DeserializeObject<T>(messageString);
@@ -204,9 +201,10 @@ namespace MessageBrokerInfrastructure
             //
 
             var scope = _serviceScopeFactory.CreateScope();
-            var handlerInstance = _serviceProvider.GetServices(handlerType).FirstOrDefault();
+            //var handlerInstance = _serviceProvider.GetServices(handlerType).FirstOrDefault();
+           var allServices = _serviceProvider.GetServices<object>().Count();
 
-            //var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
+            var handlerInstance = scope.ServiceProvider.GetRequiredService(handlerType);
 
             //var HandlerInstance = Activator.CreateInstance(HandlerType);
             //var handlerInstance = _serviceProvider.GetRequiredService(handlerType);

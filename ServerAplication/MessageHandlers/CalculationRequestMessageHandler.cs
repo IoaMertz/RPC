@@ -17,6 +17,7 @@ namespace ServerAplication.MessageHandlers
         }
         public Task Handle(CalculationRequestMessage message, string? replyQueue, string? correlationId)
         {
+            Console.WriteLine("aaaaaaaaaaaaaaaaaaaa");
             message.Number = 00000000000000;
 
             _messageBroker.Publish(message,replyQueue,correlationId);
