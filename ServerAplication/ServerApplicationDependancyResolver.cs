@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using MessageBrokerDomain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using ServerAplication.Interfaces;
 using ServerAplication.MessageHandlers;
+using ServerAplication.Services;
 using ServerDomain.Messages;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,10 @@ namespace ServerAplication
         {
 
             services.AddTransient<IReplyMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
+
+            services.AddTransient<ICalculation, AddService>();
+            services.AddTransient<ICalculation,SubstractService>();
+            services.AddTransient<ICalculation, MultiplyService>();
 
             return services;
         }

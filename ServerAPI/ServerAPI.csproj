@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MessageBrokerDomain\MessageBrokerDomain.csproj" />
     <ProjectReference Include="..\MessageBrokerInfrastructure\MessageBrokerInfrastructure.csproj" />
     <ProjectReference Include="..\ServerAplication\ServerAplication.csproj" />
