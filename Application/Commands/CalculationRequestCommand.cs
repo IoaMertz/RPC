@@ -11,14 +11,18 @@ namespace Application.Commands
 {
     public class CalculationRequestCommand : IRequest<bool>
     {
+        public string ClientsID { get; set; }
+        public string ClientsIP { get; set; }
         public int Number { get; set; }
         public string ServiceName { get; set; }
         public int Number1 { get; set; }
         public int Number2 { get; set; }
         public float Result { get; set; }
 
-        public CalculationRequestCommand(int number1,int number2, string serviceName )
+        public CalculationRequestCommand(string clientID,string clientIP,int number1,int number2, string serviceName )
         {
+            ClientsID = clientID;
+            ClientsIP = clientIP;
             Number1 = number1;
             Number2 = number2;
             ServiceName = serviceName;

@@ -1,8 +1,11 @@
 using MessageBrokerDomain.Interfaces;
 using ServerAplication.MessageHandlers;
-using ServerDomain.Messages;
 using ServerAplication;
 using MessageBrokerInfrastructure;
+using Microsoft.Azure.Cosmos;
+using Database;
+using Microsoft.Azure.Cosmos.Fluent;
+using ServerAplication.Messages;
 
 namespace ServerAPI
 {
@@ -14,16 +17,38 @@ namespace ServerAPI
 
             // Add services to the container.
 
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSingleton<CosmosClient>(sp =>
+            {
+                CosmosClientBuilder cosmosClientBuilder = new CosmosClientBuilder("https://localhost:8081/",
+                    "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
+                    .WithConnectionModeDirect()
+                    .WithBulkExecution(true)
+                    .WithSerializerOptions(new CosmosSerializationOptions()
+                    {
+                        PropertyNamingPolicy = CosmosPropertyNamingPolicy.Default
+                    });
+
+                return cosmosClientBuilder.Build();
+            });
 
             builder.Services.MessageBrokerInfrastructureRegisterServices();
 
             builder.Services.ServerApplicationRegisterServices();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<CosmosClient>();
+                CreateCosmosDatabase.Create(context);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

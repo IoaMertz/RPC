@@ -8,6 +8,7 @@ namespace ServerDomain.Models
 {
     public class CalculationRequestObject
     {
+
         public int Number { get; set; }
         public string ServiceName { get; set; }
     }

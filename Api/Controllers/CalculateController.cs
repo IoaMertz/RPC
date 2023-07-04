@@ -21,7 +21,9 @@ namespace CalculationsApi.Controllers
         public async Task<ActionResult<CalculationResponseObject>> Calculate(
             [FromBody] CalculationRequestObject calculateRequestObject)
         {
-            var sendTask =  _mediator.Send(new CalculationRequestCommand(
+            var ipv4Addres = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+
+            var sendTask =  _mediator.Send(new CalculationRequestCommand(calculateRequestObject.ClientsID, ipv4Addres,
                 calculateRequestObject.Number1,calculateRequestObject.Number2,calculateRequestObject.ServiceName));
 
             var completedTask = await Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromMinutes(0.01)));
