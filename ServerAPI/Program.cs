@@ -41,6 +41,8 @@ namespace ServerAPI
 
             builder.Services.ServerApplicationRegisterServices();
 
+            builder.Services.DatabaseRegisterServices();
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

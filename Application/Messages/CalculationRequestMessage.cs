@@ -18,6 +18,8 @@ namespace Application.Messages
 
         public CalculationRequestMessage(string clientId,string clientsIP,int number1,int number2,string serviceName)
         {
+            ClientsID = clientId;
+            ClientsIP = clientsIP;
             Number1 = number1;
             Number2 = number2;  
             ServiceName = serviceName;

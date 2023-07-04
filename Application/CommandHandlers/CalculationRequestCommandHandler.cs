@@ -20,7 +20,9 @@ namespace Application.CommandHandlers
         public async Task<bool> Handle(CalculationRequestCommand request, CancellationToken cancellationToken)
         {
             Console.Write($" client command i publish {request.Number1},  {request.Number2}\n");
-            await _messageBroker.PublishRPC(new CalculationRequestMessage(request.ClientsID,request.ClientsIP,request.Number1,request.Number2,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
+            await _messageBroker.PublishRPC(new CalculationRequestMessage(request.ClientsID,
+                request.ClientsIP,request.Number1,
+                request.Number2,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
 
 
             return true;
