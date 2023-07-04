@@ -19,8 +19,8 @@ namespace Application.CommandHandlers
         }
         public async Task<bool> Handle(CalculationRequestCommand request, CancellationToken cancellationToken)
         {
-            Console.Write($"client command i publish {request.Number}");
-            await _messageBroker.PublishRPC(new CalculationRequestMessage(request.Number,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
+            Console.Write($" client command i publish {request.Number} \n");
+            await _messageBroker.PublishRPC(new CalculationRequestMessage(request.Number1,request.Number2,request.ServiceName),"CalculationRequestQueue","CalculationRequestReplyQueue");
 
 
             return true;

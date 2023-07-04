@@ -25,6 +25,8 @@ namespace ServerAplication
             services.AddTransient<ICalculation,SubstractService>();
             services.AddTransient<ICalculation, MultiplyService>();
 
+            services.AddTransient<GetRequiredService>();
+
             return services;
         }
     }

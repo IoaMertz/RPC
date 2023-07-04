@@ -19,7 +19,8 @@ namespace ServerAplication.Services
 
         public ICalculation GetService(string serviceName)
         {
-            
+            var service = (ICalculation)_serviceProvider.GetServices(typeof(ICalculation)).Where(se => se.GetType().Name == serviceName).FirstOrDefault();
+
 
             return (ICalculation)_serviceProvider.GetServices(typeof(ICalculation)).Where(se => se.GetType().Name == serviceName).FirstOrDefault();
 

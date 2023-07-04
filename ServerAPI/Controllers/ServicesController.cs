@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServerAplication.Interfaces;
 
 namespace ServerAPI.Controllers
 {
@@ -7,10 +8,19 @@ namespace ServerAPI.Controllers
     [ApiController]
     public class ServicesController : ControllerBase
     {
-        //[HttpGet]
-        //public ActionResult Get()
-        //{
+        private readonly IServiceProvider _serviceProvider;
 
-        //}
+        public ServicesController(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<string>>> Get()
+        {
+            var availableServicesNames = _serviceProvider.GetServices(typeof(ICalculation)).Select(ser => ser.GetType().Name);
+
+            return Ok(availableServicesNames);
+        }
     }
 }

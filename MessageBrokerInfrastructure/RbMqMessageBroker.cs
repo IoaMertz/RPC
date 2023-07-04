@@ -166,7 +166,6 @@ namespace MessageBrokerInfrastructure
 
             consumer.Received += async (model, ea) =>
             {
-                Console.WriteLine("i am hereee");
 
                 var messageString = Encoding.UTF8.GetString(ea.Body.ToArray());
 

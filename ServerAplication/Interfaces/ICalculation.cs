@@ -8,6 +8,6 @@ namespace ServerAplication.Interfaces
 {
     public interface ICalculation
     {
-        Task<int> CalculateAsync(int Number);
+        float CalculateAsync(int Number1 , int Number2);
     }
 }

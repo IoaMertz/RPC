@@ -9,9 +9,9 @@ namespace ServerAplication.Services
 {
     public class SubstractService : ICalculation
     {
-        public Task<int> CalculateAsync(int Number)
+        public float CalculateAsync(int Number1 , int Number2)
         {
-            return Task.FromResult(Number - 2);
+            return Number1-Number2;
         }
     }
 }

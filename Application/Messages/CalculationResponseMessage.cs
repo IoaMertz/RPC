@@ -1,15 +1,12 @@
-﻿using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Schema;
 
-namespace Application.Commands
+namespace Application.Messages
 {
-    public class CalculationRequestCommand : IRequest<bool>
+    public class CalculationResponseMessage
     {
         public int Number { get; set; }
         public string ServiceName { get; set; }
@@ -17,12 +14,12 @@ namespace Application.Commands
         public int Number2 { get; set; }
         public float Result { get; set; }
 
-        public CalculationRequestCommand(int number1,int number2, string serviceName )
+        public CalculationResponseMessage(int number1, int number2, string serviceName, float result)
         {
             Number1 = number1;
             Number2 = number2;
             ServiceName = serviceName;
+            Result = result;
         }
-
     }
 }

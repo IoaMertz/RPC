@@ -11,11 +11,15 @@ namespace Application.Messages
     {
         public int Number { get; set; }
         public string ServiceName { get; set; }
+        public int Number1 { get; set; }
+        public int Number2 { get; set; }
 
-        public CalculationRequestMessage(int number ,string serviceName)
+        public CalculationRequestMessage(int number1,int number2,string serviceName)
         {
-            Number = number;
+            Number1 = number1;
+            Number2 = number2;  
             ServiceName = serviceName;
+
         }
     }
 }

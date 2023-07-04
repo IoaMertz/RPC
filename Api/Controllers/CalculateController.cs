@@ -22,7 +22,7 @@ namespace CalculationsApi.Controllers
             [FromBody] CalculationRequestObject calculateRequestObject)
         {
             var sendTask =  _mediator.Send(new CalculationRequestCommand(
-                calculateRequestObject.Number,calculateRequestObject.Service));
+                calculateRequestObject.Number1,calculateRequestObject.Number2,calculateRequestObject.ServiceName));
 
             var completedTask = await Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromMinutes(0.01)));
 
