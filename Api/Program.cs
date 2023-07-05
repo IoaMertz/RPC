@@ -47,6 +47,18 @@ namespace CalculationsApi
             //this should not be here
             builder.Services.DatabaseRegisterServices();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: "DefaultPolicy",
+                    policy =>
+                    {
+                        policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
 
 
 
@@ -58,6 +70,8 @@ namespace CalculationsApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("DefaultPolicy");
 
             app.UseHttpsRedirection();
 
