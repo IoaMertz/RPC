@@ -10,7 +10,7 @@ namespace Database.Interfaces
     public abstract class DbModel
     {
         [JsonProperty("id")]
-        private readonly string Id;
+        public readonly string Id;
         protected  DbModel()
         {
             Id = Guid.NewGuid().ToString();

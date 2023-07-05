@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using Database.DbModels;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,14 @@ namespace Database
             var database = await cosmosClient.CreateDatabaseIfNotExistsAsync("Giannis-Project");
             var userContainer = database.Database.CreateContainerIfNotExistsAsync("Users", "/Id").GetAwaiter().GetResult();
             var calculationsContainer = database.Database.CreateContainerIfNotExistsAsync("Calculations", "/CalculationId").GetAwaiter().GetResult();
+
+            var userCont = cosmosClient.GetContainer("Giannis-Project", "Users");
+
+            await userCont.CreateItemAsync(new UserDbModel() { UserName="guest",Password="guest"});
+
+
+
+
             //var logContainer = database.CreateContainerIfNotExistsAsync("Logs", "/id").GetAwaiter().GetResult();
         }
     }

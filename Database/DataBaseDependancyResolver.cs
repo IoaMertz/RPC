@@ -1,6 +1,7 @@
 ﻿using Database.DbModels;
 using Database.Interfaces;
 using Database.Repositories;
+using Database.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace Database
             {
 
                 services.AddTransient<IRepository<CalculationDbModel>, CalculationDbModelRepository>();
+
+                services.AddTransient<LogInService>();
 
                 return services;
             }

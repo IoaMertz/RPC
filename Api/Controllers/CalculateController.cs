@@ -2,6 +2,7 @@
 using Application.Messages;
 using Database.DbModels;
 using Database.Interfaces;
+using Database.Services;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -18,16 +19,32 @@ namespace CalculationsApi.Controllers
         //this should not be here !!!!!(Client should not see DB or the repositories)
         private readonly IRepository<CalculationDbModel> _repo;
 
-        public CalculateController(IMediator mediator, IRepository<CalculationDbModel> repo)
+        //this should not be here 
+        private readonly LogInService _logInService;
+
+        public CalculateController(IMediator mediator, IRepository<CalculationDbModel> repo,LogInService logInService)
         {
             _mediator = mediator;
+
+            //this is wrong
             _repo = repo;
+
+            //this is wrong 
+            _logInService = logInService;
         }
 
         [HttpPost]
         public async Task<ActionResult<CalculationResponseMessage>> Calculate(
             [FromBody] CalculationRequestObject calculateRequestObject)
         {
+
+            //this should happen in the server
+            if(await _logInService.ValidateUser(calculateRequestObject.ClientsID) == null)
+            {
+                return Ok("User Not Found");
+            }
+
+
             var ipv4Addres = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
 
             var sendTask =   _mediator.Send(new CalculationRequestCommand(calculateRequestObject.ClientsID, ipv4Addres,
