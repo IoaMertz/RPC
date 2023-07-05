@@ -19,7 +19,7 @@ namespace Application
         {
             services.AddTransient<IRequestHandler<CalculationRequestCommand, bool>, CalculationRequestCommandHandler>();
 
-            services.AddTransient<IMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
+            services.AddTransient<IMessageHandler<CalculationResponseMessage>, CalculationResponseMessageHandler>();
 
             return services;
         }

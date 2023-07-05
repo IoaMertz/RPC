@@ -34,12 +34,13 @@ namespace ServerAplication.MessageHandlers
 
             Console.WriteLine($" and give back this : {result}");
 
-            var responseMessage = new CalculationResponseMessage(message.ClientsID,message.ClientsIP,message.Number1,message.Number2,);
+            var responseMessage = new CalculationResponseMessage(message.ClientsID,message.ClientsIP,
+                message.Number1,message.Number2,message.ServiceName,result);
 
-            await _repository.AddAsync(new CalculationDbModel(message.ClientsID, message.ClientsIP,
-                message.Number1, message.Number2, message.Result, message.ServiceName));
+            await _repository.AddAsync(new CalculationDbModel(responseMessage.ClientsID, responseMessage.ClientsIP,
+                responseMessage.Number1, responseMessage.Number2, responseMessage.Result, responseMessage.ServiceName));
 
-            _messageBroker.Publish(message,replyQueue,correlationId);
+            _messageBroker.Publish(responseMessage,replyQueue,correlationId);
 
             
         }

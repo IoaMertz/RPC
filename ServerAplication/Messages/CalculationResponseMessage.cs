@@ -17,7 +17,7 @@ namespace ServerAplication.Messages
         public int Number2 { get; set; }
         public float Result { get; set; }
 
-        public CalculationResponseMessage(string clientId, string clientsIP, int number1, int number2, string serviceName,int result)
+        public CalculationResponseMessage(string clientId, string clientsIP, int number1, int number2, string serviceName,float result)
         {
             ClientsID = clientId;
             ClientsIP = clientsIP;

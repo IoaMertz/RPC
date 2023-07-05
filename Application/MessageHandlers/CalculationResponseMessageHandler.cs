@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Application.MessageHandlers
 {
-    public class CalculationRequestMessageHandler : IMessageHandler<CalculationRequestMessage>
+    public class CalculationResponseMessageHandler : IMessageHandler<CalculationResponseMessage>
     {
-        public Task Handle(CalculationRequestMessage message)
+        public Task Handle(CalculationResponseMessage message)
         {
-            //Console.WriteLine(" Server gave me this :  " + message.Result);
+            Console.WriteLine(" Server gave me this :  " + message.Result);
             return Task.CompletedTask;
         }
     }

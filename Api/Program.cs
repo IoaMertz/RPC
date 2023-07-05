@@ -54,7 +54,7 @@ namespace CalculationsApi
         {
             var messageBroker = app.Services.GetRequiredService<IMessageBroker>();
             messageBroker.DeclareQueue("CalculationRequestReplyQueue");
-            messageBroker.SubscribeRPC<CalculationRequestMessage, CalculationRequestMessageHandler>("CalculationRequestReplyQueue");
+            messageBroker.SubscribeRPC<CalculationResponseMessage, CalculationResponseMessageHandler>("CalculationRequestReplyQueue");
 
 
             
