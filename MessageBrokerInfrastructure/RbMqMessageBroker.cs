@@ -224,7 +224,7 @@ namespace MessageBrokerInfrastructure
 
                 await (Task)handlerConcreteType.GetMethod("Handle").Invoke(handlerInstance, new object[] { messageObject });
 
-                tcs.SetResult($"Ok {messageString}");
+                tcs.SetResult(messageString);
 
             };
 

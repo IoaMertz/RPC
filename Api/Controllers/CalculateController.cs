@@ -1,4 +1,5 @@
 ﻿using Application.Commands;
+using Application.Messages;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -18,20 +19,21 @@ namespace CalculationsApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CalculationResponseObject>> Calculate(
+        public async Task<ActionResult<CalculationResponseMessage>> Calculate(
             [FromBody] CalculationRequestObject calculateRequestObject)
         {
             var ipv4Addres = HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
 
-            var sendTask =  _mediator.Send(new CalculationRequestCommand(calculateRequestObject.ClientsID, ipv4Addres,
+            var sendTask =   _mediator.Send(new CalculationRequestCommand(calculateRequestObject.ClientsID, ipv4Addres,
                 calculateRequestObject.Number1,calculateRequestObject.Number2,calculateRequestObject.ServiceName));
 
             var completedTask = await Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromMinutes(0.01)));
+            
 
             if (completedTask == sendTask)
             {
                 // The sendTask completed within the timeout duration
-                return Ok("Succes");
+                return Ok(sendTask.Result);
             }
 
             return StatusCode(500, new { message="timeout"});

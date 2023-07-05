@@ -17,7 +17,7 @@ namespace Application
     {
         public static IServiceCollection ClientApplicationRegisterServices(this IServiceCollection services)
         {
-            services.AddTransient<IRequestHandler<CalculationRequestCommand, bool>, CalculationRequestCommandHandler>();
+            services.AddTransient<IRequestHandler<CalculationRequestCommand, CalculationResponseMessage>, CalculationRequestCommandHandler>();
 
             services.AddTransient<IMessageHandler<CalculationResponseMessage>, CalculationResponseMessageHandler>();
 

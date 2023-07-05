@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Messages;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Xml.Schema;
 
 namespace Application.Commands
 {
-    public class CalculationRequestCommand : IRequest<bool>
+    public class CalculationRequestCommand : IRequest<CalculationResponseMessage>
     {
         public string ClientsID { get; set; }
         public string ClientsIP { get; set; }
