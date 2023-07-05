@@ -10,6 +10,6 @@ namespace Database.Interfaces
     public interface IRepository<T> where T : DbModel
     {
          Task<CalculationDbModel> AddAsync(T dbModel);
-         IEnumerable<T> GetAllAsync();
+         Task<IEnumerable<CalculationDbModel>> GetAllAsync();
     }
 }

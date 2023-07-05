@@ -1,6 +1,7 @@
 ﻿using Database.DbModels;
 using Database.Interfaces;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +36,20 @@ namespace Database.Repositories
 
 
 
-        public IEnumerable<CalculationDbModel> GetAllAsync()
+        public async Task<IEnumerable<CalculationDbModel>> GetAllAsync()
         {
-            var items = _container.GetItemLinqQueryable<CalculationDbModel>().ToList();
+            //var items = _container.GetItemLinqQueryable<CalculationDbModel>().ToList();
+            //return items;
+            var query = _container.GetItemLinqQueryable<CalculationDbModel>();
+            var iterator = query.ToFeedIterator<CalculationDbModel>();
+            var items = new List<CalculationDbModel>();
+
+            while (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync();
+                items.AddRange(response);
+            }
+
             return items;
 
         }

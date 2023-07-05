@@ -3,6 +3,9 @@ using MessageBrokerDomain.Interfaces;
 using MessageBrokerInfrastructure;
 using Application;
 using Application.MessageHandlers;
+using Database;
+using Microsoft.Azure.Cosmos.Fluent;
+using Microsoft.Azure.Cosmos;
 
 namespace CalculationsApi
 {
@@ -25,6 +28,24 @@ namespace CalculationsApi
             builder.Services.MessageBrokerInfrastructureRegisterServices();
 
             builder.Services.ClientApplicationRegisterServices();
+
+            //this should not be here !!!! client must not reference DB
+
+            builder.Services.AddSingleton<CosmosClient>(sp =>
+            {
+                CosmosClientBuilder cosmosClientBuilder = new CosmosClientBuilder("https://localhost:8081/",
+                    "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
+                    .WithConnectionModeDirect()
+                    .WithBulkExecution(true)
+                    .WithSerializerOptions(new CosmosSerializationOptions()
+                    {
+                        PropertyNamingPolicy = CosmosPropertyNamingPolicy.Default
+                    });
+
+                return cosmosClientBuilder.Build();
+            });
+            //this should not be here
+            builder.Services.DatabaseRegisterServices();
 
 
 

@@ -1,5 +1,7 @@
 ﻿using Application.Commands;
 using Application.Messages;
+using Database.DbModels;
+using Database.Interfaces;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -13,9 +15,13 @@ namespace CalculationsApi.Controllers
     {
         private readonly IMediator _mediator;
 
-        public CalculateController(IMediator mediator)
+        //this should not be here !!!!!(Client should not see DB or the repositories)
+        private readonly IRepository<CalculationDbModel> _repo;
+
+        public CalculateController(IMediator mediator, IRepository<CalculationDbModel> repo)
         {
             _mediator = mediator;
+            _repo = repo;
         }
 
         [HttpPost]
@@ -37,6 +43,18 @@ namespace CalculationsApi.Controllers
             }
 
             return StatusCode(500, new { message="timeout"});
+        }
+
+
+
+        //this is wrong it uses repos directly, this need to happen on the server 
+        // command -> send() 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CalculationDbModel>>> GetAll()
+        {
+            var kati = await _repo.GetAllAsync();
+            Console.WriteLine("");
+            return Ok( kati);
         }
     }
 }
