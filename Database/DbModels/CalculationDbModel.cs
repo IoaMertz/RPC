@@ -11,9 +11,9 @@ namespace Database.DbModels
     public class CalculationDbModel  :DbModel
     {
         [JsonProperty("Clientsid")]
-        public int ClientsID { get; set; }
+        public string ClientsID { get; set; }
         [JsonProperty("ClientsIP")]
-        public int ClientsIP { get; set; }
+        public string ClientsIP { get; set; }
         [JsonProperty("Number1")]
         public int Number1 { get; set; }
         [JsonProperty("Number2")]
@@ -27,7 +27,7 @@ namespace Database.DbModels
             
         }
 
-        public CalculationDbModel(int clientsID, int clientsIP, int number1, int number2, float result, string serviceName)
+        public CalculationDbModel(string clientsID, string clientsIP, int number1, int number2, float result, string serviceName)
         {
             ClientsID = clientsID;
             ClientsIP = clientsIP;

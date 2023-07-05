@@ -9,14 +9,15 @@ namespace ServerAplication.Messages
 {
     public class CalculationRequestMessage : Message
     {
-        public int ClientsID { get; set; }  
-        public int ClientsIP { get; set; }
+        public string ClientsID { get; set; }
+        public string ClientsIP { get; set; }
+        public string ServiceName { get; set; }
         public int Number1 { get; set; }
         public int Number2 { get; set; }
-        public float Result { get; set; }
-        public string ServiceName { get; set; }
-        public CalculationRequestMessage(int number1,int number2,float Result, string serviceName)
+        public CalculationRequestMessage(string clientId, string clientsIP, int number1, int number2, string serviceName)
         {
+            ClientsID = clientId;
+            ClientsIP = clientsIP;
             Number1 = number1;
             Number2 = number2;
             ServiceName = serviceName;

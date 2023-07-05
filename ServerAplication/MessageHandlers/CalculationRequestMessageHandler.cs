@@ -30,14 +30,14 @@ namespace ServerAplication.MessageHandlers
 
             Console.WriteLine($"I am server i got this {message.Number1} and {message.Number2} \n");
 
-            var result =  service.CalculateAsync(message.Number1,message.Number2);
+            var result = service.CalculateAsync(message.Number1, message.Number2);
 
             Console.WriteLine($" and give back this : {result}");
 
-            message.Result = result;
+            var responseMessage = new CalculationResponseMessage(message.ClientsID,message.ClientsIP,message.Number1,message.Number2,);
 
-            await _repository.AddAsync(new CalculationDbModel(message.ClientsID,message.ClientsIP,
-                message.Number1,message.Number2,message.Result,message.ServiceName));
+            await _repository.AddAsync(new CalculationDbModel(message.ClientsID, message.ClientsIP,
+                message.Number1, message.Number2, message.Result, message.ServiceName));
 
             _messageBroker.Publish(message,replyQueue,correlationId);
 
