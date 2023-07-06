@@ -22,14 +22,14 @@ namespace Application.CommandHandlers
         public async Task<CalculationResponseMessage> Handle(CalculationRequestCommand request, CancellationToken cancellationToken)
         {
             Console.Write($" client command i publish {request.Number1},  {request.Number2}\n");
-                var kati =  await _messageBroker.PublishRPC(new CalculationRequestMessage(request.ClientsID,
-                request.ClientsIP, request.Number1,
-                request.Number2, request.ServiceName), "CalculationRequestQueue", "CalculationRequestReplyQueue");
+            var responseMessage = await _messageBroker.PublishRPC(new CalculationRequestMessage(request.ClientsID,
+            request.ClientsIP, request.Number1,
+            request.Number2, request.ServiceName), "CalculationRequestQueue", "CalculationRequestReplyQueue");
 
-            var ela = JsonConvert.DeserializeObject<CalculationResponseMessage>(kati);
+            var calculationResponse = JsonConvert.DeserializeObject<CalculationResponseMessage>(responseMessage);
 
 
-            return ela;
+            return calculationResponse;
         }
 
 
