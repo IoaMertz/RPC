@@ -12,7 +12,6 @@ namespace Application.MessageHandlers
     {
         public Task Handle(UserValidationResponseMessage message)
         {
-            Console.WriteLine(message.);
             return Task.CompletedTask;
         }
     }

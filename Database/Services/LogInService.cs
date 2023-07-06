@@ -58,7 +58,15 @@ namespace Database.Services
 
                 var response = await iterator.ReadNextAsync();
 
-                return response.FirstOrDefault().Id;
+                string Id = null;
+
+                var user = response.FirstOrDefault();
+                if (user != null)
+                {
+                    Id = user.Id;
+                }
+
+                return Id;
             }
             catch (Exception)
             {

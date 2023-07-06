@@ -21,6 +21,9 @@ namespace ServerAplication
 
             services.AddTransient<IReplyMessageHandler<CalculationRequestMessage>, CalculationRequestMessageHandler>();
 
+            services.AddTransient<IReplyMessageHandler<UserValidationRequestMessage>, UserValidationRequestMessageHandler>();
+ 
+
             services.AddTransient<ICalculation, AddService>();
             services.AddTransient<ICalculation,SubstractService>();
             services.AddTransient<ICalculation, MultiplyService>();

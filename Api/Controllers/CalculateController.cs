@@ -16,21 +16,16 @@ namespace CalculationsApi.Controllers
     {
         private readonly IMediator _mediator;
 
-        //this should not be here !!!!!(Client should not see DB or the repositories)
-        private readonly IRepository<CalculationDbModel> _repo;
+        IRepository<CalculationDbModel> _repo;
 
-        //this should not be here 
-        private readonly LogInService _logInService;
 
-        public CalculateController(IMediator mediator, IRepository<CalculationDbModel> repo,LogInService logInService)
+
+
+        public CalculateController(IMediator mediator, IRepository<CalculationDbModel> repo)
         {
             _mediator = mediator;
-
-            //this is wrong
             _repo = repo;
 
-            //this is wrong 
-            _logInService = logInService;
         }
 
         [HttpPost]
@@ -40,9 +35,9 @@ namespace CalculationsApi.Controllers
 
             //refactor 
              var logInValidationTask = await _mediator.Send(new UserValidationCommand(calculateRequestObject.ClientsID));
-
+            
             //this should happen in the server
-            if(await _logInService.ValidateUser(calculateRequestObject.ClientsID) == null)
+            if (logInValidationTask == null)
             {
                 return Ok("User Not Found");
             }

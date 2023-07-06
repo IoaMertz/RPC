@@ -78,6 +78,11 @@ namespace ServerAPI
             messageBroker.DeclareQueue("CalculationRequestQueue");
             messageBroker.SubscribeReply<CalculationRequestMessage, CalculationRequestMessageHandler>("CalculationRequestQueue");
 
+            //login
+
+            messageBroker.DeclareQueue("UserValidationRequestQueue");
+            messageBroker.SubscribeReply<UserValidationRequestMessage,UserValidationRequestMessageHandler>("UserValidationRequestQueue");
+
         }
     }
 }
