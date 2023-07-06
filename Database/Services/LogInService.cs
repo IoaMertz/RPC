@@ -32,9 +32,15 @@ namespace Database.Services
                 var iterator = query.ToFeedIterator<UserDbModel>();
 
                 var response = await iterator.ReadNextAsync();
-                var kati = response.FirstOrDefault().Id;
+                string userId = null;
 
-                return kati;
+                var user = response.FirstOrDefault();
+                if (user != null)
+                {
+                    userId = user.Id;
+                }
+
+                return userId;
 
             }catch (Exception ex)
             {
