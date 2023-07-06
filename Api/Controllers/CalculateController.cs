@@ -38,6 +38,9 @@ namespace CalculationsApi.Controllers
             [FromBody] CalculationRequestObject calculateRequestObject)
         {
 
+            //refactor 
+             var logInValidationTask = await _mediator.Send(new UserValidationCommand(calculateRequestObject.ClientsID));
+
             //this should happen in the server
             if(await _logInService.ValidateUser(calculateRequestObject.ClientsID) == null)
             {
@@ -49,6 +52,8 @@ namespace CalculationsApi.Controllers
 
             var sendTask =   _mediator.Send(new CalculationRequestCommand(calculateRequestObject.ClientsID, ipv4Addres,
                 calculateRequestObject.Number1,calculateRequestObject.Number2,calculateRequestObject.ServiceName));
+
+
 
             var completedTask = await Task.WhenAny(sendTask, Task.Delay(TimeSpan.FromMinutes(0.09)));
             
