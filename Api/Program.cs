@@ -91,6 +91,11 @@ namespace CalculationsApi
             messageBroker.DeclareQueue("CalculationRequestReplyQueue");
             messageBroker.SubscribeRPC<CalculationResponseMessage, CalculationResponseMessageHandler>("CalculationRequestReplyQueue");
 
+            //login
+
+            messageBroker.DeclareQueue("UserValidationReplyQueue");
+            messageBroker.SubscribeRPC<UserValidationResponseMessage,UserValidationResponseMessageHandler>("UserValidationReplyQueue");
+
 
             
         }

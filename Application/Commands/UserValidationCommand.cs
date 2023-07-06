@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Commands
 {
-    public class UserValidationCommand :IRequest<int>
+    public class UserValidationCommand :IRequest<string>
     {
         public string? UserId { get; set; }
 

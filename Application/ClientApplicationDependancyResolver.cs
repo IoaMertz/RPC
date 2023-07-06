@@ -21,6 +21,10 @@ namespace Application
 
             services.AddTransient<IMessageHandler<CalculationResponseMessage>, CalculationResponseMessageHandler>();
 
+            services.AddTransient<IRequestHandler<UserValidationCommand, string>, UserValidationCommandHandler>();
+
+            services.AddTransient<IMessageHandler<UserValidationResponseMessage>, UserValidationResponseMessageHandler>();
+
             return services;
         }
     }
